@@ -1,57 +1,43 @@
-# Number Checker Smart Contract
+# Wine Purchase Smart Contract
 
 ## Overview
 
-This Solidity smart contract, named `NumberChecker`, provides functions to check various properties of signed integers. It utilizes `revert`, `require`, and `assert` statements to enforce conditions and ensure the validity of input numbers. The contract is designed to be a simple utility for verifying positive, negative, and even numbers.
+This is a simple smart contract implemented in Solidity, a programming language for creating smart contracts on the Ethereum blockchain. The contract facilitates the purchase of wine, with age verification to ensure that buyers are at least 21 years old.
 
 ## Features
 
-### 1. Check Positive Number
+1. **Purchase Wine Functionality:**
+   - Users can purchase wine by calling the `purchaseWine` function, providing their age and the quantity of wine they want to purchase.
+   - The function checks that the quantity is greater than 0 and verifies the buyer's age using the `ageVerify` function.
+   - The purchase details, including the quantity, are recorded for the buyer.
 
-- Function: `checkPositive(int256 number) public pure returns (bool)`
-- Uses `revert` to ensure that the input number is positive.
-- Returns `true` if the number is positive; otherwise, reverts with the message "Number must be positive."
+2. **Age Verification:**
+   - The `ageVerify` function is a simple age verification mechanism. It ensures that the buyer is at least 21 years old.
+   - If the buyer is not eligible due to age, the function reverts with an error message.
 
-### 2. Check Negative Number
+3. **Billing Calculation:**
+   - Users can query their total bill by calling the `calculateBill` function.
+   - The function checks whether the user has made a purchase and calculates the total bill based on the quantity and the predefined price per bottle of wine.
 
-- Function: `checkNegative(int256 number) public pure returns (bool)`
-- Utilizes `require` to verify that the input number is negative.
-- Returns `true` if the number is negative; otherwise, reverts with the message "Number must be negative."
+4. **Mappings:**
+   - The contract uses three private mappings to store information:
+      - `hasPurchased`: Records whether an address has made a purchase.
+      - `purchaseCount`: Counts the number of purchases made by each address.
+      - `wineQuantity`: Records the quantity of wine purchased by each address.
 
-### 3. Check Even Number
+5. **Assertions:**
+   - Assertions are used to ensure that critical conditions, such as the purchased quantity and purchase count, are always greater than 0.
 
-- Function: `checkEven(int256 number) public pure returns (bool)`
-- Combines `assert` and `require` statements to check if the input number is even.
-- Asserts that the number is non-negative and then requires that it is even.
-- Returns `true` if the number is even; otherwise, reverts with the message "Number must be even."
+6. **Constants:**
+   - The contract defines a public constant `winePrice` representing the price of one bottle of wine.
 
 ## Usage
 
-1. **Check Positive Number:**
-   - Call the `checkPositive` function with an integer as an argument.
-   - The function will return `true` if the number is positive; otherwise, it will revert with an error message.
+1. Deploy the smart contract to the Ethereum blockchain.
+2. Call the `purchaseWine` function, providing your age and the quantity of wine you want to purchase.
+3. Verify your age using the `ageVerify` function.
+4. Query your total bill using the `calculateBill` function.
 
-2. **Check Negative Number:**
-   - Use the `checkNegative` function by providing a signed integer as input.
-   - The function returns `true` if the number is negative; otherwise, it reverts with an error message.
-
-3. **Check Even Number:**
-   - Call the `checkEven` function with an integer as an argument.
-   - The function will return `true` if the number is even and non-negative; otherwise, it will revert with an error message.
-
-## Error Handling
-
-- **Revert:**
-  - `revert` is used to handle situations where the condition for positivity is not met.
-  - The error message provides information about the specific condition that caused the revert.
-
-- **Require:**
-  - `require` is employed to handle cases where the condition for negativity or evenness is not satisfied.
-  - The error message specifies the required condition.
-
-- **Assert:**
-  - `assert` is used to ensure that the number is non-negative before checking for evenness.
-  - If the assertion fails, it indicates a critical issue in the code.
 
 ## Author
 
