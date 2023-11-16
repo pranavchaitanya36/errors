@@ -1,25 +1,40 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.18;
 
-contract NumberChecker {
-    // Function to check if a number is positive using revert
-    function checkPositive(int256 number) public pure returns (bool) {
-        if (!(number > 0)) {
-            revert("Number must be positive");
+contract WinePurchase {
+    mapping(address => bool) private hasPurchased;
+    mapping(address => uint) private purchaseCount;
+    mapping(address => uint) private wineQuantity;
+
+    uint public winePrice = 100; // Assuming the price of one bottle of wine is 10 Ether
+
+    function purchaseWine(uint _age, uint _quantity) external {
+        require(_quantity > 0, "Quantity must be greater than 0");
+
+        ageVerify(_age);
+
+        purchaseCount[msg.sender] += 1;
+        wineQuantity[msg.sender] += _quantity;
+        hasPurchased[msg.sender] = true;
+
+        assert(wineQuantity[msg.sender] > 0); // Assert that the quantity is greater than 0
+        assert(purchaseCount[msg.sender] > 0);
+    }
+
+    function ageVerify(uint _age) public pure returns(bool) {
+        if (_age >= 21) {
+            // Age is greater than or equal to 21, return true
+            return true;
+        } else {
+            // Age is less than 21, revert with an error message
+            revert("Not Eligible to Purchase Wine");
         }
-        return true;
     }
 
-    // Function to check if a number is negative using require
-    function checkNegative(int256 number) public pure returns (bool) {
-        require(number < 0, "Number must be negative");
-        return true;
-    }
+    function calculateBill() external view returns (uint) {
+        require(hasPurchased[msg.sender], "You haven't purchased any wine");
 
-    // Function to check if a number is even using assert and require
-    function checkEven(int256 number) public pure returns (bool) {
-        assert(number >= 0); 
-        require(number % 2 == 0, "Number must be even");
-        return true;
+        uint totalBill = wineQuantity[msg.sender] * winePrice;
+        return totalBill;
     }
 }
